@@ -1,0 +1,225 @@
+openapi: 3.0.0
+info:
+  title: Variations API
+  version: 1.0.0
+  description: API for managing variations.
+servers:
+  - url: http://localhost:3000
+    description: Local server
+
+tags:
+  - name: Variations
+    description: Operations related to variations.
+
+paths:
+  /variations:
+    get:
+      tags:
+        - Variations
+      summary: Get all variations
+      parameters:
+        - name: lang
+          in: query
+          required: false
+          schema:
+            type: string
+            default: en
+          description: Language for the translations.
+      responses:
+        200:
+          description: Variations retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Variations retrieved successfully
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          nullable: true
+        404:
+          description: No variations found
+    post:
+      tags:
+        - Variations
+      summary: Add a new variation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                translations:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      language:
+                        type: string
+                      value:
+                        type: string
+                  example:
+                    - language: en
+                      value: Size
+                    - language: ar
+                      value: حجم
+      responses:
+        201:
+          description: Variation added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Variation added successfully
+                  data:
+                    $ref: '#/components/schemas/Variation'
+        400:
+          description: Translations are required and must be an array
+
+  /variations/{id}:
+    get:
+      tags:
+        - Variations
+      summary: Get a variation by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Variation ID
+        - name: lang
+          in: query
+          required: false
+          schema:
+            type: string
+            default: en
+          description: Language for the translation.
+      responses:
+        200:
+          description: Variation retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Variation retrieved successfully
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                        nullable: true
+                      createdAt:
+                        type: string
+                        format: date-time
+        404:
+          description: Variation not found
+    put:
+      tags:
+        - Variations
+      summary: Update a variation by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Variation ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                translations:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      language:
+                        type: string
+                      value:
+                        type: string
+                  example:
+                    - language: en
+                      value: Color
+                    - language: ar
+                      value: لون
+      responses:
+        200:
+          description: Variation updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Variation updated successfully
+                  variation:
+                    $ref: '#/components/schemas/Variation'
+        400:
+          description: Variation ID is required
+        404:
+          description: Variation not found
+    delete:
+      tags:
+        - Variations
+      summary: Remove a variation by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Variation ID
+      responses:
+        200:
+          description: Variation removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Variation removed successfully
+        404:
+          description: Variation not found
+
+components:
+  schemas:
+    Variation:
+      type: object
+      properties:
+        id:
+          type: integer
+        translations:
+          type: array
+          items:
+            type: object
+            properties:
+              language:
+                type: string
+              value:
+                type: string
+        createdAt:
+          type: string
+          format: date-time

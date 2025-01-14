@@ -1,0 +1,132 @@
+openapi: 3.0.0
+info:
+  title: Recommended Products API
+  version: 1.0.0
+  description: API for managing recommended products.
+servers:
+  - url: http://localhost:3000
+    description: Local server
+
+tags:
+  - name: Recommended
+    description: Operations related to recommended products.
+
+paths:
+  /recommended:
+    get:
+      tags:
+        - Recommended
+      summary: Get all recommended products
+      responses:
+        200:
+          description: Recommended products retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  recommendedProducts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Recommended'
+        404:
+          description: No recommended products found
+    post:
+      tags:
+        - Recommended
+      summary: Add a recommended product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: integer
+                  example: 1
+      responses:
+        201:
+          description: Recommended product added successfully
+        400:
+          description: Product ID is required or Product is already recommended
+        404:
+          description: Product not found
+
+  /recommended/{id}:
+    get:
+      tags:
+        - Recommended
+      summary: Get a recommended product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Recommended product ID
+      responses:
+        200:
+          description: Recommended product retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recommended'
+        404:
+          description: Recommended product not found
+    delete:
+      tags:
+        - Recommended
+      summary: Remove a recommended product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Recommended product ID
+      responses:
+        200:
+          description: Recommended product removed successfully
+        404:
+          description: Recommended product not found
+
+  /recommended/count:
+    get:
+      tags:
+        - Recommended
+      summary: Get the total number of recommended products
+      responses:
+        200:
+          description: Total recommended products retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  count:
+                    type: integer
+
+components:
+  schemas:
+    Recommended:
+      type: object
+      properties:
+        id:
+          type: integer
+        product:
+          $ref: '#/components/schemas/Product'
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string

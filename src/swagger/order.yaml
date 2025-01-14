@@ -1,0 +1,187 @@
+openapi: 3.0.0
+info:
+  title: Order API
+  description: API documentation for managing orders and related products.
+  version: 1.0.0
+paths:
+  /orders:
+    post:
+      tags:
+        - Orders
+      summary: Create a new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                delivery_fee:
+                  type: number
+                  description: Delivery fee for the order
+                valet:
+                  type: number
+                  description: Valet service charge
+                subtotal:
+                  type: number
+                  description: Subtotal of the order
+                total:
+                  type: number
+                  description: Total amount of the order
+                order_type:
+                  type: string
+                  enum: [delivery, takeaway, dine_in]
+                  description: Type of the order
+                table_number:
+                  type: integer
+                  description: Table number for dine-in orders
+                lat:
+                  type: number
+                  description: Latitude of delivery location
+                long:
+                  type: number
+                  description: Longitude of delivery location
+                phone_number:
+                  type: string
+                  description: Customer's phone number
+                take_away_time:
+                  type: string
+                  format: time
+                  description: Time for takeaway orders
+                street_address:
+                  type: string
+                  description: Street address for delivery
+                building_name:
+                  type: string
+                  description: Name of the building
+                apartment_number:
+                  type: string
+                  description: Apartment number
+                products:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product:
+                        type: integer
+                        description: Product ID
+                      variation:
+                        type: integer
+                        description: Variation ID
+                      product_count:
+                        type: integer
+                        description: Quantity of the product
+                      product_price:
+                        type: number
+                        description: Price of the product
+      responses:
+        '201':
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  orderId:
+                    type: integer
+        '400':
+          description: Invalid request
+
+    get:
+      tags:
+        - Orders
+      summary: Get a list of orders
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Number of items per page
+      responses:
+        '200':
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                  metaData:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      page:
+                        type: integer
+                      limit:
+                        type: integer
+        '500':
+          description: Internal server error
+
+  /orders/{id}:
+    get:
+      tags:
+        - Orders
+      summary: Get order by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Order ID
+      responses:
+        '200':
+          description: Order details
+        '404':
+          description: Order not found
+        '500':
+          description: Internal server error
+    put:
+      tags:
+        - Orders
+      summary: Update an order
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Order ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Order updated successfully
+        '404':
+          description: Order not found
+    delete:
+      tags:
+        - Orders
+      summary: Delete an order
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Order ID
+      responses:
+        '200':
+          description: Order deleted successfully
+        '404':
+          description: Order not found

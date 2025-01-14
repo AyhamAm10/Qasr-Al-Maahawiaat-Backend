@@ -1,0 +1,208 @@
+openapi: 3.0.1
+info:
+  title: Product Management API
+  version: 1.0.0
+  description: API documentation for managing products.
+servers:
+  - url: http://localhost:3000
+    description: Local server
+paths:
+  /products:
+    post:
+      tags:
+        - Products
+      summary: Add a new product
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                details:
+                  type: string
+                base_price:
+                  type: number
+                offer_price:
+                  type: number
+                  nullable: true
+                category_id:
+                  type: integer
+                  nullable: true
+                productData:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      variation_id:
+                        type: integer
+                      price_For_variation:
+                        type: number
+                      offer_for_variation:
+                        type: number
+                      variation_images:
+                        type: string
+                        format: binary
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Product added successfully
+        '400':
+          description: Bad request
+    get:
+      tags:
+        - Products
+      summary: Get all products
+      responses:
+        '200':
+          description: List of products retrieved successfully
+        '404':
+          description: No products found
+
+  /products/{id}:
+    get:
+      tags:
+        - Products
+      summary: Get a product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Product retrieved successfully
+        '404':
+          description: Product not found
+
+    put:
+      tags:
+        - Products
+      summary: Update a product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  nullable: true
+                details:
+                  type: string
+                  nullable: true
+                base_price:
+                  type: number
+                  nullable: true
+                offer_price:
+                  type: number
+                  nullable: true
+                category_id:
+                  type: integer
+                  nullable: true
+                image:
+                  type: string
+                  format: binary
+                variations:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      variation_id:
+                        type: integer
+                      price_For_variation:
+                        type: number
+                      offer_for_variation:
+                        type: number
+      responses:
+        '200':
+          description: Product updated successfully
+        '404':
+          description: Product not found
+
+    delete:
+      tags:
+        - Products
+      summary: Delete a product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Product deleted successfully
+        '404':
+          description: Product not found
+
+  /products/category/{categoryId}:
+    get:
+      tags:
+        - Products
+      summary: Get products by category ID
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Products retrieved successfully
+        '404':
+          description: Category or products not found
+
+  /products/{id}/offer:
+    post:
+      tags:
+        - Products
+      summary: Add an offer to a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                offer_price:
+                  type: number
+      responses:
+        '200':
+          description: Offer added successfully
+        '404':
+          description: Product not found
+
+    delete:
+      tags:
+        - Products
+      summary: Delete an offer from a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Offer deleted successfully
+        '404':
+          description: Product not found

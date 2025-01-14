@@ -1,0 +1,115 @@
+openapi: 3.0.0
+info:
+  title: Authentication API
+  description: API for user authentication including login and logout operations.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8800/api
+    description: Development server
+
+tags:
+  - name: Auth
+    description: Authentication operations
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: User login
+      description: Authenticate user and return an access token and set a refresh token in cookies.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: Login successful. Returns an access token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        400:
+          description: Invalid email or password.
+        404:
+          description: User not found.
+        500:
+          description: Internal server error.
+
+  /auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: User logout
+      description: Clear the refresh token cookie and logout the user.
+      responses:
+        200:
+          description: Logout successful.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logout successful
+        500:
+          description: Internal server error.
+
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          description: User's password
+          example: yourpassword123
+      required:
+        - email
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Login successful
+        accessToken:
+          type: string
+          description: JWT access token for authenticated requests
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+          description: User's username
+        email:
+          type: string
+          description: User's email address
+        isActive:
+          type: boolean
+          description: Whether the user is active
+          default: true
+        role:
+          type: string
+          enum: [admin, manager, dataEntry]
+          description: Role of the user
+      required:
+        - id
+        - username
+        - email
+        - isActive
+        - role

@@ -1,0 +1,193 @@
+openapi: 3.0.0
+info:
+  title: Category API
+  version: 1.0.0
+  description: API for managing categories.
+tags:
+  - name: Categories
+    description: Endpoints for category management.
+paths:
+  /categories:
+    get:
+      tags:
+        - Categories
+      summary: Retrieve paginated categories
+      description: Get a list of categories with pagination and optional language translations.
+      parameters:
+        - name: page
+          in: query
+          description: The page number.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: The number of items per page.
+          required: false
+          schema:
+            type: integer
+        - name: lang
+          in: query
+          description: Language code for translations (e.g., "en", "ar").
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Categories retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      categories:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/CategoryWithTranslation'
+                  metaData:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+    post:
+      tags:
+        - Categories
+      summary: Add a new category
+      description: Add a new category to the database.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: Category added successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /categories/{id}:
+    get:
+      tags:
+        - Categories
+      summary: Retrieve a category by ID
+      description: Get detailed information about a specific category.
+      parameters:
+        - name: id
+          in: path
+          description: The category ID.
+          required: true
+          schema:
+            type: integer
+        - name: language
+          in: query
+          description: Language code for translations (e.g., "en", "ar").
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Category retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  category:
+                    $ref: '#/components/schemas/CategoryWithTranslation'
+        404:
+          description: Category not found.
+    delete:
+      tags:
+        - Categories
+      summary: Delete a category by ID
+      description: Delete a specific category from the database.
+      parameters:
+        - name: id
+          in: path
+          description: The category ID.
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Category deleted successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    put:
+      tags:
+        - Categories
+      summary: Update a category
+      description: Update a category's name or image.
+      parameters:
+        - name: id
+          in: path
+          description: The category ID.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: Category updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  category:
+                    $ref: '#/components/schemas/CategoryWithTranslation'
+  /categories/count:
+    get:
+      tags:
+        - Categories
+      summary: Get the count of categories
+      description: Retrieve the total number of categories.
+      responses:
+        200:
+          description: Count retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message

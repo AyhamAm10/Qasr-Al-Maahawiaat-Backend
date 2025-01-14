@@ -1,0 +1,292 @@
+openapi: 3.0.0
+info:
+  title: User API
+  description: API for managing users, including add, delete, and retrieve operations.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8800
+    description: Development server
+
+tags:
+  - name: Users
+    description: Operations for managing users
+
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get all users
+      description: Retrieve a list of all users in the system.
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: The page number for pagination
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+          description: The number of users per page
+      responses:
+        200:
+          description: List of users retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+        404:
+          description: No users found.
+        500:
+          description: Internal server error.
+
+    post:
+      tags:
+        - Users
+      summary: Add a new user
+      description: Add a new user with the provided details.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUserRequest'
+      responses:
+        201:
+          description: User added successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddUserResponse'
+        400:
+          description: Missing required fields.
+        500:
+          description: Internal server error.
+
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get user by ID
+      description: Retrieve a user by their ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user to retrieve
+      responses:
+        200:
+          description: User retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        400:
+          description: User ID is required.
+        404:
+          description: User not found.
+        500:
+          description: Internal server error.
+
+    delete:
+      tags:
+        - Users
+      summary: Delete user by ID
+      description: Delete a user by their ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user to delete
+      responses:
+        200:
+          description: User deleted successfully.
+        400:
+          description: User ID is required.
+        404:
+          description: User not found.
+        500:
+          description: Internal server error.
+
+components:
+  schemas:
+    AddUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          description: User's username
+          example: johndoe
+        email:
+          type: string
+          description: User's email address
+          example: johndoe@example.com
+        password:
+          type: string
+          format: password
+          description: User's password
+          example: mysecurepassword
+        isActive:
+          type: boolean
+          description: Whether the user is active
+          example: true
+        role:
+          type: string
+          enum: [super admin, HR, data entry, customer]
+          description: Role of the user
+          example: dataEntry
+        jobTitle:
+          type: string
+          description: User's job title
+          example: Developer
+        startDate:
+          type: string
+          format: date
+          description: Start date of employment
+          example: "2025-01-01"
+        endDate:
+          type: string
+          format: date
+          description: End date of employment (if applicable)
+          example: "2025-12-31"
+        residencyValidity:
+          type: string
+          format: date
+          description: Validity date of the user's residency
+          example: "2026-01-01"
+        fines:
+          type: integer
+          description: Any fines associated with the user
+          example: 0
+        discounts:
+          type: integer
+          description: Any discounts applied to the user
+          example: 0
+        loans:
+          type: integer
+          description: Any loans associated with the user
+          example: 0
+        salary:
+          type: integer
+          description: User's salary
+          example: 1000
+        vacationDays:
+          type: integer
+          description: Number of vacation days for the user
+          example: 15
+        weeklyHolidays:
+          type: integer
+          description: Number of weekly holidays
+          example: 2
+        sickDays:
+          type: integer
+          description: Number of sick days available
+          example: 10
+      required:
+        - username
+        - email
+        - password
+
+    AddUserResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: User added successfully
+        user:
+          $ref: '#/components/schemas/User'
+
+    UserResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: User retrieved successfully
+        user:
+          $ref: '#/components/schemas/User'
+
+    UserListResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Users retrieved successfully
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        metaData:
+          type: object
+          properties:
+            currentPage:
+              type: integer
+            totalPages:
+              type: integer
+            totalUsers:
+              type: integer
+            limit:
+              type: integer
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+          description: User's username
+        email:
+          type: string
+          description: User's email address
+        isActive:
+          type: boolean
+          description: Whether the user is active
+          default: true
+        role:
+          type: string
+          enum: [super admin, HR, data entry, customer]
+          description: Role of the user
+        jobTitle:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        residencyValidity:
+          type: string
+          format: date
+        fines:
+          type: integer
+        discounts:
+          type: integer
+        loans:
+          type: integer
+        salary:
+          type: integer
+        vacationDays:
+          type: integer
+        weeklyHolidays:
+          type: integer
+        sickDays:
+          type: integer
+        userRestaurantTools:
+          type: array
+          items:
+            type: object
+            properties:
+              toolName:
+                type: string
+              toolDescription:
+                type: string
+              dateAssigned:
+                type: string
+                format: date

@@ -1,0 +1,701 @@
+openapi: 3.0.0
+info:
+  title: Penalties and Discounts API
+  description: API for adding fines and discounts to a user.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+
+tags:
+  - name: HR
+    description: Operations related to users
+
+paths:
+  /users/penaltiesAndDiscounts:
+    post:
+      tags:
+        - HR
+      summary: Add fines and discounts to a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                  description: ID of the user
+                fines:
+                  type: number
+                  example: 50.0
+                  description: Amount of fines to be added
+                discounts:
+                  type: number
+                  example: 20.0
+                  description: Amount of discounts to be added
+              required:
+                - userId
+      responses:
+        '200':
+          description: Penalties and discounts added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Penalties and discounts added successfully
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      fines:
+                        type: number
+                        example: 50.0
+                      discounts:
+                        type: number
+                        example: 20.0
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-01T12:00:00Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-02T15:30:00Z
+        '400':
+          description: Bad Request - Missing user ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User ID is required
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User not found
+  /users/loans:
+    post:
+      tags:
+        - HR
+      summary: Add a loan to a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                  description: ID of the user
+                loanAmount:
+                  type: number
+                  example: 500.0
+                  description: Amount of the loan to be added
+              required:
+                - userId
+                - loanAmount
+      responses:
+        '200':
+          description: Loan added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Loan added successfully
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      loans:
+                        type: number
+                        example: 1500.0
+                      fines:
+                        type: number
+                        example: 50.0
+                      discounts:
+                        type: number
+                        example: 20.0
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-01T12:00:00Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-02T15:30:00Z
+        '400':
+          description: Bad Request - Missing user ID or loan amount
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User ID is required
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User not found
+  /users/salary:
+    post:
+      tags:
+        - HR
+      summary: Update a user's salary
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                  description: ID of the user
+                salary:
+                  type: number
+                  example: 3000.0
+                  description: New salary amount for the user
+              required:
+                - userId
+                - salary
+      responses:
+        '200':
+          description: Salary updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Salary updated successfully
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      salary:
+                        type: number
+                        example: 3000.0
+                      fines:
+                        type: number
+                        example: 50.0
+                      discounts:
+                        type: number
+                        example: 20.0
+                      loans:
+                        type: number
+                        example: 500.0
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-01T12:00:00Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-02T15:30:00Z
+        '400':
+          description: Bad Request - Missing user ID or salary
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User ID is required
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User not found
+  /users/vacation-days:
+    post:
+      tags:
+        - HR
+      summary: Add vacation days to a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                  description: ID of the user
+                vacationDays:
+                  type: integer
+                  example: 5
+                  description: Number of vacation days to add
+              required:
+                - userId
+                - vacationDays
+      responses:
+        '200':
+          description: Vacation days added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Vacation days added successfully
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      vacationDays:
+                        type: integer
+                        example: 15
+                      fines:
+                        type: number
+                        example: 50.0
+                      discounts:
+                        type: number
+                        example: 20.0
+                      loans:
+                        type: number
+                        example: 500.0
+                      salary:
+                        type: number
+                        example: 3000.0
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-01T12:00:00Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-02T15:30:00Z
+        '400':
+          description: Bad Request - Missing user ID or vacation days
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User ID is required
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User not found
+  /users/weekly-holidays:
+    post:
+      tags:
+        - HR
+      summary: Update weekly holidays for a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                  description: ID of the user
+                weeklyHolidays:
+                  type: array
+                  items:
+                    type: string
+                  example: ["Saturday", "Sunday"]
+                  description: List of weekly holidays
+              required:
+                - userId
+                - weeklyHolidays
+      responses:
+        '200':
+          description: Weekly holidays updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Weekly holidays updated successfully
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      weeklyHolidays:
+                        type: array
+                        items:
+                          type: string
+                        example: ["Saturday", "Sunday"]
+                      vacationDays:
+                        type: integer
+                        example: 15
+                      fines:
+                        type: number
+                        example: 50.0
+                      discounts:
+                        type: number
+                        example: 20.0
+                      loans:
+                        type: number
+                        example: 500.0
+                      salary:
+                        type: number
+                        example: 3000.0
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-01T12:00:00Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-02T15:30:00Z
+        '400':
+          description: Bad Request - Missing user ID or weekly holidays
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User ID is required
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User not found
+  /users/sick-days:
+    post:
+      tags:
+        - HR
+      summary: Update sick days for a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                  description: ID of the user
+                sickDays:
+                  type: integer
+                  example: 5
+                  description: Number of sick days to add
+              required:
+                - userId
+                - sickDays
+      responses:
+        '200':
+          description: Sick days updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Sick days updated successfully
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      sickDays:
+                        type: integer
+                        example: 10
+                      weeklyHolidays:
+                        type: array
+                        items:
+                          type: string
+                        example: ["Saturday", "Sunday"]
+                      vacationDays:
+                        type: integer
+                        example: 15
+                      fines:
+                        type: number
+                        example: 50.0
+                      discounts:
+                        type: number
+                        example: 20.0
+                      loans:
+                        type: number
+                        example: 500.0
+                      salary:
+                        type: number
+                        example: 3000.0
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-01T12:00:00Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-02T15:30:00Z
+        '400':
+          description: Bad Request - Missing user ID or sick days
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User ID is required
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User not found
+  /restaurant-tools:
+    post:
+      tags:
+        - HR
+      summary: Add a new restaurant tool
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Knife"
+                  description: Name of the restaurant tool
+                quantity:
+                  type: integer
+                  example: 10
+                  description: Quantity of the restaurant tool
+                available:
+                  type: boolean
+                  example: true
+                  description: Availability status of the restaurant tool
+              required:
+                - name
+                - quantity
+                - available
+      responses:
+        '201':
+          description: Restaurant tool added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Restaurant tool added successfully
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: "Knife"
+                      quantity:
+                        type: integer
+                        example: 10
+                      available:
+                        type: boolean
+                        example: true
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-01T12:00:00Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-02T15:30:00Z
+        '400':
+          description: Bad Request - Missing required fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Name, quantity, and available are required"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+  /restaurant-tools/assign:
+    post:
+      tags:
+        - HR
+      summary: Assign a restaurant tool to a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                  description: ID of the user to whom the tool is assigned
+                toolId:
+                  type: integer
+                  example: 5
+                  description: ID of the restaurant tool being assigned
+                reservedQuantity:
+                  type: integer
+                  example: 2
+                  description: Quantity of the tool reserved for the user
+              required:
+                - userId
+                - toolId
+      responses:
+        '201':
+          description: Restaurant tool assigned to user successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Restaurant tool assigned to user successfully
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 10
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          name:
+                            type: string
+                            example: "John Doe"
+                      restaurantTool:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 5
+                          name:
+                            type: string
+                            example: "Knife"
+                      reservedQuantity:
+                        type: integer
+                        example: 2
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-01T12:00:00Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-02T15:30:00Z
+        '400':
+          description: Bad Request - Missing required fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User ID and Tool ID are required"
+        '404':
+          description: Not Found - User or tool not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User or tool not found"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
+
+
+
